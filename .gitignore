@@ -3,4 +3,5 @@ node_modules/
 /frontend/node_modules/
 .env
 /biruchat/node_modules/
-/biruchat
+/biruchat/
+/screenshots
