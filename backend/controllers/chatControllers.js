@@ -7,7 +7,7 @@ const User = require("../models/userModel");
 //@access          Protected
 const accessChat = asyncHandler(async (req, res) => {
   const { userId } = req.body;
-
+  console.log("access the chat in side chat controller in line 10 ************************************", req.body);
   if (!userId) {
     console.log("UserId param not sent with request");
     return res.sendStatus(400);
@@ -51,10 +51,13 @@ const accessChat = asyncHandler(async (req, res) => {
   }
 });
 
-//@description     Fetch all chats for a user
+//@description     Fetch all chats for  a logged user
 //@route           GET /api/chat/
 //@access          Protected
 const fetchChats = asyncHandler(async (req, res) => {
+
+  console.log("Fetch all chats for  a logged user inside chat controller line 59 ************************************", req.body);
+
   try {
     Chat.find({ users: { $elemMatch: { $eq: req.user._id } } })
       .populate("users", "-password")
@@ -66,7 +69,7 @@ const fetchChats = asyncHandler(async (req, res) => {
           path: "latestMessage.sender",
           select: "name pic email",
         });
-        console.log("Fetched all chats of a user", results);
+        console.log("Fetched all chats of a looged user in chat controller line 72", results);
         res.status(200).send(results);
       });
   } catch (error) {
@@ -75,10 +78,13 @@ const fetchChats = asyncHandler(async (req, res) => {
   }
 });
 
-//@description     Create New Group Chat
+//@description     Create New a Group 
 //@route           POST /api/chat/group
 //@access          Protected
 const createGroupChat = asyncHandler(async (req, res) => {
+
+  console.log("A group is created inside the chat Controller line 86 ************************************", req.body);
+
   if (!req.body.users || !req.body.name) {
     return res.status(400).send({ message: "Please Fill all the feilds" });
   }
@@ -104,7 +110,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
     const fullGroupChat = await Chat.findOne({ _id: groupChat._id })
       .populate("users", "-password")
       .populate("groupAdmin", "-password");
-
+    console.log("Group is created ******************", fullGroupChat);
     res.status(200).json(fullGroupChat);
   } catch (error) {
     res.status(400);
@@ -117,6 +123,7 @@ const createGroupChat = asyncHandler(async (req, res) => {
 // @access  Protected
 const renameGroup = asyncHandler(async (req, res) => {
   const { chatId, chatName } = req.body;
+  console.log("Rename the group in chat controller line 126 ************************************", req.body);
 
   const updatedChat = await Chat.findByIdAndUpdate(
     chatId,
@@ -144,6 +151,7 @@ const renameGroup = asyncHandler(async (req, res) => {
 // @access  Protected
 const removeFromGroup = asyncHandler(async (req, res) => {
   const { chatId, userId } = req.body;
+  console.log("A user has been removed in chat controller ************************************", req.body);
 
   // check if the requester is admin
 
@@ -172,6 +180,7 @@ const removeFromGroup = asyncHandler(async (req, res) => {
 // @access  Protected
 const addToGroup = asyncHandler(async (req, res) => {
   const { chatId, userId } = req.body;
+  console.log("A user has been added in chat controller ************************************", req.body);
 
   // check if the requester is admin
 
